@@ -9,11 +9,13 @@ class Settings:
 
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
+    LLM_MODEL = "llama-3.3-70b-versatile"
+
     EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
     REPO_STORAGE_PATH = "data/repos"
 
-    VECTOR_DB_PATH = "data/vectorstore"
+    VECTORSTORE_PATH = "data/vectorstore"
 
     ALLOWED_EXTENSIONS = {
         ".py",
@@ -48,6 +50,5 @@ class Settings:
         ".idea",
         ".vscode",
     }
-
 
 settings = Settings()
