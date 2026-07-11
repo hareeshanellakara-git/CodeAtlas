@@ -2,6 +2,7 @@ venv/
 __pycache__/
 *.py[cod]
 *.pyo
+*.pyd
 
 .env
 
@@ -15,3 +16,10 @@ vectorstore/
 
 .DS_Store
 Thumbs.db
+
+.streamlit/secrets.toml
+
+.pytest_cache/
+
+.mypy_cache/
+.ruff_cache/

@@ -1,7 +1,7 @@
 
 
 from fastapi import APIRouter, HTTPException
-
+from backend.config import Settings
 from backend.api.schemas import (
     ChatRequest,
     ChatResponse,
@@ -32,7 +32,18 @@ def ingest_repository(request: IngestRequest):
             message=(
                 f"Repository '{result['repository']}' "
                 "indexed successfully."
-            )
+            ),
+            repository=result["repository"],
+
+            documents_processed=result["documents_processed"],
+
+            chunks_created=result["chunks_created"],
+
+            embedding_model=Settings.EMBEDDING_MODEL,
+
+            vector_database="FAISS",
+
+            llm=Settings.LLM_MODEL,
         )
 
     except Exception as error:
