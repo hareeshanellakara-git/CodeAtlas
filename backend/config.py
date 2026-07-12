@@ -11,7 +11,7 @@ class Settings:
 
     LLM_MODEL = "llama-3.3-70b-versatile"
 
-    EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+    EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
 
     REPO_STORAGE_PATH = "data/repos"
 

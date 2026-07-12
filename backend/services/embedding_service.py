@@ -1,22 +1,14 @@
-from langchain_huggingface import HuggingFaceEmbeddings
-
-from backend.config import settings
+from langchain_community.embeddings import FastEmbedEmbeddings
 
 
 class EmbeddingService:
-    
 
     def __init__(self):
 
-        self.embeddings = HuggingFaceEmbeddings(
-            model_name=settings.EMBEDDING_MODEL,
-            model_kwargs={
-                "device": "cpu"
-            },
-            encode_kwargs={
-                "normalize_embeddings": True
-            },
+        self.embeddings = FastEmbedEmbeddings(
+            model_name="BAAI/bge-small-en-v1.5"
         )
 
-    def get_embedding_model(self) -> HuggingFaceEmbeddings:
+    def get_embedding_model(self):
+
         return self.embeddings

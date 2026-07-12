@@ -1,6 +1,6 @@
 # 🤖 CodeAtlas
 
-> **AI-powered GitHub Repository Assistant built with LangChain, FastAPI, Streamlit, HuggingFace Embeddings, FAISS, and Groq.**
+> **AI-powered GitHub Repository Assistant built with LangChain, FastAPI, Streamlit, FastEmbed Embeddings, FAISS, and Groq.**
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 
@@ -37,7 +37,7 @@ CodeAtlas is an AI-powered GitHub Repository Assistant that helps developers und
 - 🤖 AI-powered GitHub Repository Assistant
 - 🔍 Retrieval-Augmented Generation (RAG)
 - ⚡ FastAPI + Streamlit architecture
-- 🧠 LangChain + Groq + HuggingFace Embeddings + FAISS
+- 🧠 LangChain + Groq + FastEmbed Embeddings + FAISS
 - 🏗️ Modular architecture following Separation of Concerns
 - 📚 Automatic repository indexing and semantic code search
 
@@ -73,7 +73,7 @@ CodeAtlas is an AI-powered GitHub Repository Assistant that helps developers und
 * 🔗 Analyze any public GitHub repository
 * 🤖 Ask questions about the codebase in natural language
 * 📚 Retrieval-Augmented Generation (RAG) pipeline
-* 🧠 Semantic code search using HuggingFace embeddings
+* 🧠 Semantic code search using FastEmbed embeddings
 * 🗄️ FAISS vector database for efficient retrieval
 * ⚡ Fast inference using Groq Llama 3.3
 * 📄 Displays source files used to generate every answer
@@ -154,7 +154,7 @@ The assistant retrieves the most relevant code snippets before generating an ans
 
           ▼                               ▼
 
- HuggingFace Embeddings      Prompt + Llama 3.3
+ FastEmbed Embeddings      Prompt + Llama 3.3
 
           │                               │
 
@@ -179,7 +179,7 @@ The assistant retrieves the most relevant code snippets before generating an ans
 | Backend              | FastAPI                                |
 | LLM                  | Groq (Llama 3.3-70B Versatile)         |
 | Framework            | LangChain                              |
-| Embeddings           | sentence-transformers/all-MiniLM-L6-v2 |
+| Embeddings           | BAAI/bge-small-en-v1.5 |
 | Vector Database      | FAISS                                  |
 | Repository Access    | GitPython                              |
 | Programming Language | Python                                 |
@@ -270,7 +270,7 @@ Chunking improves retrieval quality by allowing the system to retrieve only the 
 Each chunk is converted into a dense vector representation using:
 
 ```
-sentence-transformers/all-MiniLM-L6-v2
+BAAI/bge-small-en-v1.5
 ```
 
 Embeddings capture semantic meaning rather than exact keyword matches.

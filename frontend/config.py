@@ -20,7 +20,7 @@ LOGO_PATH2 = "frontend/assets/logo2.png"
 CSS_PATH = "frontend/styles/style.css"
 
 
-DEFAULT_EMBEDDING_MODEL = "MiniLM-L6-v2"
+DEFAULT_EMBEDDING_MODEL = "FastEmbed (BAAI/bge-small-en-v1.5)"
 DEFAULT_LLM = "Llama 3.3-70B (Groq)"
 DEFAULT_VECTOR_DB = "FAISS"
 
