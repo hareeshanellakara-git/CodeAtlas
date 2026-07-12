@@ -20,9 +20,9 @@
 
 🚀 **Try CodeAtlas Live**
 
-**Frontend:** https://your-streamlit-url.streamlit.app
+**Frontend:** https://codeatlas-ai.streamlit.app/
 
-**Backend API:** https://your-backend-url.onrender.com
+**Backend API:** https://codeatlas-backend-s5zr.onrender.com/
 
 ---
 
