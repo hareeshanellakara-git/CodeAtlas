@@ -16,6 +16,17 @@
 
 
 
+## 🌐 Live Demo
+
+🚀 **Try CodeAtlas Live**
+
+**Frontend:** https://your-streamlit-url.streamlit.app
+
+**Backend API:** https://your-backend-url.onrender.com
+
+---
+
+
 CodeAtlas is an AI-powered GitHub Repository Assistant that helps developers understand unfamiliar codebases through natural language conversations. It automatically clones a public repository, builds a semantic knowledge base using **Retrieval-Augmented Generation (RAG)**, and answers questions with context-aware responses backed by the repository's source code.
 
 
@@ -32,15 +43,7 @@ CodeAtlas is an AI-powered GitHub Repository Assistant that helps developers und
 
 ---
 
-## 🌐 Live Demo
 
-🚀 **Try CodeAtlas Live**
-
-**Frontend:** https://your-streamlit-url.streamlit.app
-
-**Backend API:** https://your-backend-url.onrender.com
-
----
 
 
 ## 📸 Screenshots
