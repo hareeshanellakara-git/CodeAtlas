@@ -24,4 +24,10 @@ DEFAULT_EMBEDDING_MODEL = "FastEmbed (BAAI/bge-small-en-v1.5)"
 DEFAULT_LLM = "GPT-OSS 120B (Groq)"
 DEFAULT_VECTOR_DB = "FAISS"
 
-POWERED_BY = ["LangChain", "Groq", "FAISS", "HuggingFace", "FastAPI", "Streamlit"]
+POWERED_BY = ["LangChain", "Groq", "FAISS", "FastEmbed", "FastAPI", "Streamlit"]
+
+
+
+IMPACT_ENDPOINT = f"{API_BASE_URL}/impact"
+
+REQUEST_TIMEOUT_IMPACT = 30

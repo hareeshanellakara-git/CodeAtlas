@@ -7,6 +7,9 @@ from backend.services.vectorstore_service import VectorStoreService
 from backend.repository_intelligence.repository_analyzer import (
     RepositoryAnalyzer,
 )
+from backend.repository_intelligence.analysis_store import (
+    AnalysisStore,
+)
 
 
 class GitHubService:
@@ -26,6 +29,7 @@ class GitHubService:
         self.repository_analyzer = (
             RepositoryAnalyzer()
         )
+        self.analysis_store = AnalysisStore()
 
     def ingest_repository(
         self,
@@ -45,6 +49,25 @@ class GitHubService:
             )
         )
 
+
+        repository_name = (
+            repo_url.rstrip("/")
+            .split("/")[-1]
+        )
+
+        if repository_name.endswith(".git"):
+            repository_name = repository_name[:-4]
+
+        repository_intelligence[
+            "repository_name"
+        ] = repository_name
+
+        self.analysis_store.save(
+            repository_name,
+            repository_intelligence,
+        )
+
+
         documents = (
             self.document_loader.load_repository(
                 repo_path
@@ -61,13 +84,7 @@ class GitHubService:
             chunks
         )
 
-        repository_name = (
-            repo_url.rstrip("/")
-            .split("/")[-1]
-        )
-
-        if repository_name.endswith(".git"):
-            repository_name = repository_name[:-4]
+        
 
         return {
             "status": "success",

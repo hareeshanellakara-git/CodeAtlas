@@ -37,3 +37,26 @@ class ChatResponse(BaseModel):
     answer: str
 
     sources: list[str]
+
+
+
+class ImpactRequest(BaseModel):
+
+    repository: str
+
+    changed_file: str
+
+
+class ImpactResponse(BaseModel):
+
+    repository: str
+
+    changed_file: str
+
+    direct_dependents: list[str]
+
+    indirect_dependents: list[str]
+
+    total_affected_files: int
+
+    all_affected_files: list[str]

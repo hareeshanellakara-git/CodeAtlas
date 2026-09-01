@@ -7,12 +7,19 @@ from backend.api.schemas import (
     ChatResponse,
     IngestRequest,
     IngestResponse,
+    ImpactRequest,
+    ImpactResponse,
 )
 
 from backend.services.chat_service import ChatService
+from backend.services.github_service import GitHubService
 
-from backend.services.github_service import (
-    GitHubService,
+from backend.repository_intelligence.analysis_store import (
+    AnalysisStore,
+)
+
+from backend.repository_intelligence.impact_analyzer import (
+    ImpactAnalyzer,
 )
 
 
@@ -111,6 +118,73 @@ def chat(
         return ChatResponse(
             answer=result["answer"],
             sources=sources,
+        )
+
+    except Exception as error:
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(error),
+        )
+
+
+@router.post(
+    "/impact",
+    response_model=ImpactResponse,
+)
+def analyze_impact(
+    request: ImpactRequest,
+):
+
+    try:
+
+        analysis_store = AnalysisStore()
+
+        analysis = analysis_store.load(
+            request.repository
+        )
+
+        dependency_edges = analysis.get(
+            "dependency_edges",
+            [],
+        )
+
+        analyzer = ImpactAnalyzer()
+
+        result = analyzer.analyze(
+            dependency_edges,
+            request.changed_file,
+        )
+
+        return ImpactResponse(
+            repository=request.repository,
+
+            changed_file=result[
+                "changed_file"
+            ],
+
+            direct_dependents=result[
+                "direct_dependents"
+            ],
+
+            indirect_dependents=result[
+                "indirect_dependents"
+            ],
+
+            total_affected_files=result[
+                "total_affected_files"
+            ],
+
+            all_affected_files=result[
+                "all_affected_files"
+            ],
+        )
+
+    except FileNotFoundError as error:
+
+        raise HTTPException(
+            status_code=404,
+            detail=str(error),
         )
 
     except Exception as error:

@@ -13,6 +13,11 @@ from components.repository_intelligence import (
     render_repository_intelligence,
 )
 
+from components.architecture_view import (
+    render_architecture_view,
+)
+
+
 
 
 def load_css(path: str) -> None:
@@ -42,6 +47,7 @@ def main():
     if st.session_state.repo_indexed:
         render_stats_dashboard()
         render_repository_intelligence()
+        render_architecture_view()
 
     st.markdown("<br>", unsafe_allow_html=True)
     render_chat_interface()
