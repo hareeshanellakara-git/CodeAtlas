@@ -9,6 +9,9 @@ from components.repository_card import render_repository_card
 from components.chat_interface import render_chat_interface
 from components.stats_dashboard import render_stats_dashboard
 from components.footer import render_footer
+from components.repository_intelligence import (
+    render_repository_intelligence,
+)
 
 
 
@@ -38,6 +41,7 @@ def main():
 
     if st.session_state.repo_indexed:
         render_stats_dashboard()
+        render_repository_intelligence()
 
     st.markdown("<br>", unsafe_allow_html=True)
     render_chat_interface()

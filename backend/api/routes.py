@@ -1,15 +1,20 @@
-
-
 from fastapi import APIRouter, HTTPException
+
 from backend.config import Settings
+
 from backend.api.schemas import (
     ChatRequest,
     ChatResponse,
     IngestRequest,
     IngestResponse,
 )
+
 from backend.services.chat_service import ChatService
-from backend.services.github_service import GitHubService
+
+from backend.services.github_service import (
+    GitHubService,
+)
+
 
 router = APIRouter()
 
@@ -18,14 +23,18 @@ router = APIRouter()
     "/ingest",
     response_model=IngestResponse,
 )
-def ingest_repository(request: IngestRequest):
+def ingest_repository(
+    request: IngestRequest,
+):
 
     try:
 
         github_service = GitHubService()
 
-        result = github_service.ingest_repository(
-            str(request.repository_url)
+        result = (
+            github_service.ingest_repository(
+                str(request.repository_url)
+            )
         )
 
         return IngestResponse(
@@ -33,17 +42,30 @@ def ingest_repository(request: IngestRequest):
                 f"Repository '{result['repository']}' "
                 "indexed successfully."
             ),
+
             repository=result["repository"],
 
-            documents_processed=result["documents_processed"],
+            documents_processed=(
+                result["documents_processed"]
+            ),
 
-            chunks_created=result["chunks_created"],
+            chunks_created=(
+                result["chunks_created"]
+            ),
 
-            embedding_model=Settings.EMBEDDING_MODEL,
+            embedding_model=(
+                Settings.EMBEDDING_MODEL
+            ),
 
             vector_database="FAISS",
 
             llm=Settings.LLM_MODEL,
+
+            repository_intelligence=(
+                result[
+                    "repository_intelligence"
+                ]
+            ),
         )
 
     except Exception as error:
@@ -58,7 +80,9 @@ def ingest_repository(request: IngestRequest):
     "/chat",
     response_model=ChatResponse,
 )
-def chat(request: ChatRequest):
+def chat(
+    request: ChatRequest,
+):
 
     try:
 
@@ -78,7 +102,9 @@ def chat(request: ChatRequest):
                         "source",
                         "Unknown",
                     )
-                    for document in result["context"]
+                    for document in result[
+                        "context"
+                    ]
                 }
             )
 

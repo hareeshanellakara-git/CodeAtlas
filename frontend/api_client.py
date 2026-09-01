@@ -26,6 +26,9 @@ class IngestResult:
     embedding_model: str = ""
     vector_database: str = ""
     llm: str = ""
+    repository_intelligence: dict = field(
+        default_factory=dict
+    )
 
     @property
     def has_detailed_stats(self) -> bool:
@@ -53,7 +56,19 @@ def ingest_repository(repo_url: str) -> IngestResult:
             json={"repository_url": repo_url},
             timeout=REQUEST_TIMEOUT_INGEST,
         )
-        response.raise_for_status()
+        if not response.ok:
+            try:
+                detail = response.json().get(
+                    "detail",
+                    "Something went wrong.",
+                )
+            except Exception:
+                detail = response.text
+
+            raise APIError(detail)
+
+    except APIError:
+        raise
     except requests.exceptions.RequestException as exc:
         raise APIError(f"Could not reach the backend: {exc}") from exc
 
@@ -66,30 +81,50 @@ def ingest_repository(repo_url: str) -> IngestResult:
         embedding_model=data.get("embedding_model", ""),
         vector_database=data.get("vector_database", ""),
         llm=data.get("llm", ""),
+        repository_intelligence=data.get(
+            "repository_intelligence",
+            {},
+        ),
     )
 
 
 def ask_question(question: str) -> ChatResult:
-    
+
     try:
         response = requests.post(
             CHAT_ENDPOINT,
             json={"question": question},
             timeout=REQUEST_TIMEOUT_CHAT,
         )
-        response.raise_for_status()
+
+        if not response.ok:
+            try:
+                detail = response.json().get(
+                    "detail",
+                    "Something went wrong.",
+                )
+            except Exception:
+                detail = response.text
+
+            raise APIError(detail)
+
+    except APIError:
+        raise
+
     except requests.exceptions.RequestException as exc:
-        raise APIError(f"Unable to connect to the backend server: {exc}") from exc
+        raise APIError(
+            f"Unable to connect to the backend server: {exc}"
+        ) from exc
 
-    if not response.ok:
-        try:
-            detail = response.json().get("detail", "Something went wrong.")
-        except Exception:
-            detail = response.text
-
-        raise APIError(detail)
     data = response.json()
+
     return ChatResult(
-        answer=data.get("answer", "I couldn't generate an answer."),
-        sources=data.get("sources", []),
+        answer=data.get(
+            "answer",
+            "I couldn't generate an answer.",
+        ),
+        sources=data.get(
+            "sources",
+            [],
+        ),
     )

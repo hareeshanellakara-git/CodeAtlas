@@ -21,7 +21,7 @@ CSS_PATH = "frontend/styles/style.css"
 
 
 DEFAULT_EMBEDDING_MODEL = "FastEmbed (BAAI/bge-small-en-v1.5)"
-DEFAULT_LLM = "Llama 3.3-70B (Groq)"
+DEFAULT_LLM = "GPT-OSS 120B (Groq)"
 DEFAULT_VECTOR_DB = "FAISS"
 
 POWERED_BY = ["LangChain", "Groq", "FAISS", "HuggingFace", "FastAPI", "Streamlit"]
