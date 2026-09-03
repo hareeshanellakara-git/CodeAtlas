@@ -22,9 +22,20 @@ def set_repo_indexed(repo_url: str, stats) -> None:
     st.session_state.chat_history = [] 
 
 
-def add_chat_message(role: str, content: str, sources=None) -> None:
+def add_chat_message(
+    role,
+    content,
+    sources=None,
+    evidence=None,
+):
+
     st.session_state.chat_history.append(
-        {"role": role, "content": content, "sources": sources or []}
+        {
+            "role": role,
+            "content": content,
+            "sources": sources or [],
+            "evidence": evidence or [],
+        }
     )
 
 

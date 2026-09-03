@@ -2,9 +2,6 @@ from langchain_classic.chains.combine_documents import (
     create_stuff_documents_chain,
 )
 
-from langchain_classic.chains import (
-    create_retrieval_chain,
-)
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
 
@@ -22,9 +19,8 @@ class ChatService:
             temperature=0,
         )
 
-        self.retriever = (
+        self.retrieval_service = (
             RetrievalService()
-            .get_retriever()
         )
 
         self.prompt = ChatPromptTemplate.from_messages(
@@ -59,17 +55,77 @@ Context:
             )
         )
 
-        self.retrieval_chain = (
-            create_retrieval_chain(
-                self.retriever,
-                self.document_chain,
+    def ask(
+        self,
+        question: str,
+    ):
+
+        retrieved_results = (
+            self.retrieval_service
+            .retrieve_with_scores(
+                question,
+                k=6,
             )
         )
 
-    def ask(self, question: str):
+        documents = [
+            document
+            for document, _ in retrieved_results
+        ]
 
-        return self.retrieval_chain.invoke(
+        result = self.document_chain.invoke(
             {
                 "input": question,
+                "context": documents,
             }
         )
+
+        evidence = []
+
+        for rank, (
+            document,
+            score,
+        ) in enumerate(
+            retrieved_results,
+            start=1,
+        ):
+
+            source = document.metadata.get(
+                "source",
+                "Unknown file",
+            )
+
+            content = (
+                document.page_content
+                .strip()
+            )
+
+            preview = content[:300]
+
+            if len(content) > 300:
+                preview += "..."
+
+            evidence.append(
+                {
+                    "rank": rank,
+                    "source": source,
+                    "score": round(
+                        float(score),
+                        4,
+                    ),
+                    "preview": preview,
+                }
+            )
+
+        sources = list(
+            dict.fromkeys(
+                item["source"]
+                for item in evidence
+            )
+        )
+
+        return {
+            "answer": result,
+            "sources": sources,
+            "evidence": evidence,
+        }

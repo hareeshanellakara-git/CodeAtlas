@@ -32,11 +32,7 @@ class ChatRequest(BaseModel):
     question: str
 
 
-class ChatResponse(BaseModel):
 
-    answer: str
-
-    sources: list[str]
 
 
 
@@ -60,3 +56,18 @@ class ImpactResponse(BaseModel):
     total_affected_files: int
 
     all_affected_files: list[str]
+
+
+class EvidenceItem(BaseModel):
+    rank: int
+    source: str
+    score: float
+    preview: str
+
+class ChatResponse(BaseModel):
+
+    answer: str
+
+    sources: list[str]
+
+    evidence: list[EvidenceItem]

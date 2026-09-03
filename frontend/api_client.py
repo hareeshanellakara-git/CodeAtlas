@@ -50,6 +50,18 @@ class IngestResult:
 
 
 @dataclass
+class EvidenceItem:
+
+    rank: int
+
+    source: str
+
+    score: float
+
+    preview: str
+
+
+@dataclass
 class ChatResult:
 
     answer: str
@@ -58,6 +70,9 @@ class ChatResult:
         default_factory=list
     )
 
+    evidence: list[EvidenceItem] = field(
+        default_factory=list
+    )
 
 @dataclass
 class ImpactResult:
@@ -242,6 +257,33 @@ def ask_question(
 
     data = response.json()
 
+    evidence = []
+
+    for item in data.get("evidence", []):
+
+        evidence.append(
+            EvidenceItem(
+                rank=item.get(
+                    "rank",
+                    0,
+                ),
+                source=item.get(
+                    "source",
+                    "Unknown",
+                ),
+                score=float(
+                    item.get(
+                        "score",
+                        0.0,
+                    )
+                ),
+                preview=item.get(
+                    "preview",
+                    "",
+                ),
+            )
+        )
+
     return ChatResult(
 
         answer=data.get(
@@ -253,9 +295,9 @@ def ask_question(
             "sources",
             [],
         ),
+
+        evidence=evidence,
     )
-
-
 def analyze_impact(
     repository: str,
     changed_file: str,

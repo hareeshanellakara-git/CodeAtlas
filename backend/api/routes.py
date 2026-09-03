@@ -99,25 +99,10 @@ def chat(
             request.question
         )
 
-        sources = []
-
-        if "context" in result:
-
-            sources = list(
-                {
-                    document.metadata.get(
-                        "source",
-                        "Unknown",
-                    )
-                    for document in result[
-                        "context"
-                    ]
-                }
-            )
-
         return ChatResponse(
             answer=result["answer"],
-            sources=sources,
+            sources=result["sources"],
+            evidence=result["evidence"],
         )
 
     except Exception as error:
@@ -126,7 +111,6 @@ def chat(
             status_code=500,
             detail=str(error),
         )
-
 
 @router.post(
     "/impact",

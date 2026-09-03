@@ -1,4 +1,4 @@
-from langchain_core.vectorstores import VectorStoreRetriever
+from langchain_core.documents import Document
 
 from backend.services.vectorstore_service import VectorStoreService
 
@@ -12,11 +12,28 @@ class RetrievalService:
             .load_vectorstore()
         )
 
-    def get_retriever(self) -> VectorStoreRetriever:
+    def retrieve_with_scores(
+        self,
+        question: str,
+        k: int = 6,
+    ) -> list[tuple[Document, float]]:
 
-        return self.vectorstore.as_retriever(
-            search_type="similarity",
-            search_kwargs={
-                "k": 4,
-            },
+        # Retrieve more candidates than we finally expose.
+        # This gives the ranking layer more evidence to work with.
+        candidate_results = (
+            self.vectorstore
+            .similarity_search_with_relevance_scores(
+                question,
+                k=8,
+            )
         )
+
+        # Rank the retrieved chunks by relevance.
+        ranked_results = sorted(
+            candidate_results,
+            key=lambda item: item[1],
+            reverse=True,
+        )
+
+        # Return the top 6 chunks.
+        return ranked_results[:k]
