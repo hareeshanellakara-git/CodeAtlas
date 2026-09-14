@@ -11,11 +11,21 @@ from config import (
     REQUEST_TIMEOUT_INGEST,
     REQUEST_TIMEOUT_CHAT,
     REQUEST_TIMEOUT_IMPACT,
+    SRS_ENDPOINT,
+    REQUEST_TIMEOUT_SRS,
 )
 
 
 class APIError(Exception):
     """Raised whenever the backend can't be reached or returns an error."""
+
+
+@dataclass
+class SRSResult:
+
+    repository: str
+
+    document: str
 
 
 @dataclass
@@ -376,5 +386,65 @@ def analyze_impact(
         all_affected_files=data.get(
             "all_affected_files",
             [],
+        ),
+    )
+
+
+
+
+def generate_srs(
+    repository: str,
+) -> SRSResult:
+
+    try:
+
+        response = requests.post(
+            SRS_ENDPOINT,
+
+            json={
+                "repository": repository,
+            },
+
+            timeout=REQUEST_TIMEOUT_SRS,
+        )
+
+        if not response.ok:
+
+            try:
+
+                detail = response.json().get(
+                    "detail",
+                    "SRS generation failed.",
+                )
+
+            except Exception:
+
+                detail = response.text
+
+            raise APIError(
+                detail
+            )
+
+    except APIError:
+
+        raise
+
+    except requests.exceptions.RequestException as exc:
+
+        raise APIError(
+            "Unable to connect to the backend server: "
+            f"{exc}"
+        ) from exc
+
+    data = response.json()
+
+    return SRSResult(
+        repository=data.get(
+            "repository",
+            repository,
+        ),
+        document=data.get(
+            "document",
+            "",
         ),
     )

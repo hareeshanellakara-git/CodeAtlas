@@ -31,3 +31,8 @@ POWERED_BY = ["LangChain", "Groq", "FAISS", "FastEmbed", "FastAPI", "Streamlit"]
 IMPACT_ENDPOINT = f"{API_BASE_URL}/impact"
 
 REQUEST_TIMEOUT_IMPACT = 30
+
+
+SRS_ENDPOINT = f"{API_BASE_URL}/srs"
+
+REQUEST_TIMEOUT_SRS = 30

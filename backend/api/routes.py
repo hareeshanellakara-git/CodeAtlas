@@ -9,6 +9,8 @@ from backend.api.schemas import (
     IngestResponse,
     ImpactRequest,
     ImpactResponse,
+    SRSRequest,
+    SRSResponse,
 )
 
 from backend.services.chat_service import ChatService
@@ -21,7 +23,9 @@ from backend.repository_intelligence.analysis_store import (
 from backend.repository_intelligence.impact_analyzer import (
     ImpactAnalyzer,
 )
-
+from backend.repository_intelligence.srs.srs_generator import (
+    SRSGenerator,
+)
 
 router = APIRouter()
 
@@ -162,6 +166,48 @@ def analyze_impact(
             all_affected_files=result[
                 "all_affected_files"
             ],
+        )
+
+    except FileNotFoundError as error:
+
+        raise HTTPException(
+            status_code=404,
+            detail=str(error),
+        )
+
+    except Exception as error:
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(error),
+        )
+
+
+@router.post(
+    "/srs",
+    response_model=SRSResponse,
+)
+def generate_srs(
+    request: SRSRequest,
+):
+
+    try:
+
+        analysis_store = AnalysisStore()
+
+        analysis = analysis_store.load(
+            request.repository
+        )
+
+        generator = SRSGenerator()
+
+        document = generator.generate(
+            analysis
+        )
+
+        return SRSResponse(
+            repository=request.repository,
+            document=document,
         )
 
     except FileNotFoundError as error:

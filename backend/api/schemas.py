@@ -71,3 +71,16 @@ class ChatResponse(BaseModel):
     sources: list[str]
 
     evidence: list[EvidenceItem]
+
+
+
+class SRSRequest(BaseModel):
+
+    repository: str
+
+
+class SRSResponse(BaseModel):
+
+    repository: str
+
+    document: str
