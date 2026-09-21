@@ -1,326 +1,391 @@
 # 🤖 CodeAtlas
 
-> **AI-powered GitHub Repository Assistant built with LangChain, FastAPI, Streamlit, FastEmbed Embeddings, FAISS, and Groq.**
+> **AI-powered GitHub Repository Assistant for intelligent repository understanding, analysis, explainable retrieval, and evidence-based documentation.**
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
-
-![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green)
-
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
 ![LangChain](https://img.shields.io/badge/LangChain-RAG-success)
-
 ![FAISS](https://img.shields.io/badge/FAISS-VectorDB-orange)
-
 ![Streamlit](https://img.shields.io/badge/Streamlit-Frontend-red)
-
-![Groq](https://img.shields.io/badge/Groq-Llama3.3-purple)
-
-
-
-## 🌐 Live Demo
-
-🚀 **Try CodeAtlas Live**
-
-**Frontend:** https://codeatlas-ai.streamlit.app/
-
-**Backend API:** https://codeatlas-backend-s5zr.onrender.com/
+![Groq](https://img.shields.io/badge/Groq-LLM-purple)
+![FastEmbed](https://img.shields.io/badge/FastEmbed-Embeddings-blueviolet)
 
 ---
 
+## 📌 Overview
 
-CodeAtlas is an AI-powered GitHub Repository Assistant that helps developers understand unfamiliar codebases through natural language conversations. It automatically clones a public repository, builds a semantic knowledge base using **Retrieval-Augmented Generation (RAG)**, and answers questions with context-aware responses backed by the repository's source code.
+**CodeAtlas** is an AI-powered GitHub Repository Assistant that helps developers understand unfamiliar codebases through natural-language interaction and automated repository analysis.
 
+Users provide a **public GitHub repository URL**, and CodeAtlas:
 
----
+- Clones and indexes the repository
+- Analyzes its source-code structure
+- Detects languages, files, functions, classes, and entry points
+- Reconstructs internal dependencies
+- Performs change-impact analysis
+- Creates a semantic knowledge base using **Retrieval-Augmented Generation (RAG)**
+- Answers repository questions using retrieved source-code evidence
+- Shows retrieval evidence and relevance scores
+- Reconstructs an **evidence-based Software Requirements Specification (SRS)** from the repository
 
-## ⭐ Highlights
-
-- 🤖 AI-powered GitHub Repository Assistant
-- 🔍 Retrieval-Augmented Generation (RAG)
-- ⚡ FastAPI + Streamlit architecture
-- 🧠 LangChain + Groq + FastEmbed Embeddings + FAISS
-- 🏗️ Modular architecture following Separation of Concerns
-- 📚 Automatic repository indexing and semantic code search
-
----
-
-
-
-
-## 📸 Screenshots
-
-
-### Home Page
-
-![CodeAtlas Home](screenshots/img1.png)
-
-### Repository Analysis & AI Response
-
-![Repository Analysis](screenshots/img2.png)
-
-### Natural Language Code Query
-
-![Chat Interface](screenshots/img3.png)
-
-### Automatic Repository Cloning & Vector Index Creation
-
-![Repository Ingestion](screenshots/img4.png)
-
+The system combines **static repository analysis** with **LLM-powered conversational retrieval**, providing both structural understanding and natural-language interaction.
 
 ---
 
-# ✨ Features
+ ## 🎥 Demo
 
-* 🔗 Analyze any public GitHub repository
-* 🤖 Ask questions about the codebase in natural language
-* 📚 Retrieval-Augmented Generation (RAG) pipeline
-* 🧠 Semantic code search using FastEmbed embeddings
-* 🗄️ FAISS vector database for efficient retrieval
-* ⚡ Fast inference using Groq Llama 3.3
-* 📄 Displays source files used to generate every answer
-* 📊 Repository statistics after indexing
-* 💬 Interactive ChatGPT-style interface
-* 🎨 Modern responsive Streamlit UI
-* 🔄 Automatic repository cloning and indexing
+A complete walkthrough of CodeAtlas covering repository ingestion, repository intelligence, dependency analysis, change-impact analysis, explainable RAG, and evidence-based SRS generation.
 
----
 
-# 🚀 Motivation
+![](https://github.com/user-attachments/assets/c8dbd78c-2e9c-43c0-8236-fd66eadda242)
 
-Developers often spend significant time understanding unfamiliar repositories before contributing to them.
 
-Traditional approaches involve:
 
-* Reading README files
-* Searching through folders
-* Opening multiple files
-* Understanding project structure manually
+## ✨ Key Features
 
-CodeAtlas automates this process using Retrieval-Augmented Generation.
+### 1. 🧠 Repository Intelligence
 
-Users simply provide a repository URL and ask questions like:
+CodeAtlas automatically analyzes the repository source code and builds a structured repository profile.
 
-* What does this project do?
-* Explain the architecture.
-* Which files implement authentication?
-* How is routing handled?
-* Which technologies are used?
+It detects:
 
-The assistant retrieves the most relevant code snippets before generating an answer, ensuring responses remain grounded in the repository instead of relying solely on the language model.
+- Programming languages
+- Source files
+- Functions
+- Classes
+- Entry points
+- Directory structure
+- Largest files
+- Internal dependencies
 
----
+**Analysis approach:** For Python repositories, CodeAtlas uses **Python AST parsing** to inspect classes, functions, and imports. For other supported languages, it uses language-specific file and pattern analysis to extract structural information.
 
-# 🏗️ System Architecture
+### 2. 🕸️ Dependency Graph
+
+CodeAtlas reconstructs internal relationships between repository files/modules based on source-code dependencies.
 
 ```text
-                        User
+simulation/generate_dataset.py
+            │
+            ▼
+simulation/queue_simulator.py
+```
 
-                          │
+The dependency analysis identifies source files, dependent files, internal dependency edges, and repository-level relationships. This information is also used by the change-impact analysis module.
 
-                          ▼
+### 3. 🔍 Change Impact Analysis
 
-                 Streamlit Frontend
+CodeAtlas analyzes the potential effect of modifying a repository file.
 
-                          │
+Given a changed file, the system identifies:
 
-                          ▼
+- Direct dependents
+- Indirect dependents
+- Total affected files
+- Change-sensitive repository hotspots
 
-                 FastAPI Backend
+The analysis uses the reconstructed dependency graph and reverse dependency traversal to determine which components may be affected by a change.
 
-          ┌───────────────┴───────────────┐
+### 4. 📚 Explainable Retrieval
 
-          ▼                               ▼
+CodeAtlas does not only return an LLM-generated answer. For every repository question, the system retrieves relevant source-code chunks from the FAISS vector database and exposes the evidence used by the retrieval pipeline.
 
- Repository Ingestion              Chat Endpoint
+The interface displays:
 
-          │                               │
+- Retrieved source files
+- Retrieval rank
+- Relevance score
+- Evidence preview
 
-          ▼                               ▼
+This makes repository answers easier to inspect and verify.
 
-     Clone Repository             Retrieval Chain
+> **Important:** Retrieval relevance scores indicate the relevance of retrieved evidence, not the probability that the final answer is correct.
 
-          │                               │
+### 5. 📄 Evidence-Based SRS Generation
 
-          ▼                               ▼
+CodeAtlas can automatically reconstruct a Software Requirements Specification from repository evidence.
 
-    Load Source Files             FAISS Retriever
+```text
+Repository Analysis
+        ↓
+Capability Detection
+        ↓
+Requirement Construction
+        ↓
+Evidence Mapping
+        ↓
+SRS Section Generation
+        ↓
+Formatted SRS
+```
 
-          │                               │
+The generated SRS can include:
 
-          ▼                               ▼
+- Introduction
+- Overall Description
+- External Interface Requirements
+- System Features
+- Nonfunctional Requirements (when supported)
+- Other Requirements (when supported)
+- Glossary
+- Analysis Models
+- Evidence Traceability
+- Change-Sensitivity Snapshot
 
-      Text Splitter               Relevant Chunks
+**Evidence-first approach:** CodeAtlas deliberately avoids inventing unsupported requirements. Requirements are mapped back to repository evidence such as source files, functions, classes, dependencies, and detected capabilities. The SRS reconstruction itself is performed using **deterministic application logic**, rather than sending the entire repository to an external LLM for document generation.
 
-          │                               │
+### 6. 💬 Repository Chatbot
 
-          ▼                               ▼
+Users can ask natural-language questions about the indexed repository:
 
- FastEmbed Embeddings      Prompt + Llama 3.3
+```text
+What does this project do?
+Explain the repository architecture.
+Which files implement the UI?
+Where is the machine-learning logic?
+Which files depend on this module?
+How does the application execute?
+What technologies are used?
+Explain this repository for a beginner.
+```
 
-          │                               │
+The chatbot uses the repository as its primary knowledge source and returns answers together with supporting evidence.
 
-          ▼                               ▼
+---
 
-      FAISS Index                 Final Response
+## 🏗️ System Architecture
 
-                          │
+```text
+                            User
+                              │
+                              ▼
+                     Streamlit Frontend
+                              │
+                              ▼
+                       FastAPI Backend
+                              │
+             ┌────────────────┴────────────────┐
+             │                                 │
+             ▼                                 ▼
+    Repository Ingestion              Repository Intelligence
+             │                                 │
+             ▼                                 ├── Language Detection
+       Clone Repository                        ├── Structure Analysis
+             │                                 ├── Dependency Analysis
+             ▼                                 ├── Entry Point Detection
+      Load Source Files                        ├── File Analysis
+             │                                 └── Architecture Profile
+             ▼
+        Text Chunking
+             │
+             ▼
+     FastEmbed Embeddings
+             │
+             ▼
+         FAISS Index
+             │
+             ▼
+       Retrieval Service
+             │
+             ▼
+      Relevant Evidence
+             │
+             ▼
+       Chat / RAG Service
+             │
+             ▼
+        Groq LLM
+             │
+             ▼
+      Answer + Sources
+             │
+             ▼
+       Streamlit UI
+```
 
-                          ▼
+### Repository Intelligence Flow
 
-                    Streamlit UI
+```text
+Repository
+    │
+    ▼
+Repository Analyzer
+    │
+    ├── Language Detection
+    ├── Code Structure Analysis
+    ├── Dependency Analysis
+    ├── Entry Point Detection
+    ├── Largest File Detection
+    └── Directory Structure
+    │
+    ▼
+Repository Profile
+    │
+    ├── Repository Intelligence
+    ├── Dependency Graph
+    ├── Change Impact Analysis
+    └── Evidence-Based SRS
 ```
 
 ---
 
-# ⚙️ Technology Stack
+## 🧠 How CodeAtlas Works
 
-| Category             | Technologies                           |
-| -------------------- | -------------------------------------- |
-| Frontend             | Streamlit                              |
-| Backend              | FastAPI                                |
-| LLM                  | Groq (Llama 3.3-70B Versatile)         |
-| Framework            | LangChain                              |
-| Embeddings           | BAAI/bge-small-en-v1.5 |
-| Vector Database      | FAISS                                  |
-| Repository Access    | GitPython                              |
-| Programming Language | Python                                 |
+### Step 1 — Repository Ingestion
 
----
-
-## 🏛️ Software Engineering Principles
-
-CodeAtlas was designed using modern software engineering practices to ensure the application remains modular, maintainable, and scalable.
-
-### Separation of Concerns (SoC)
-
-The project follows the **Separation of Concerns** principle by dividing responsibilities across independent modules.
-
-* **Frontend Layer** – Streamlit interface responsible only for user interaction and visualization.
-* **API Layer** – FastAPI endpoints handle HTTP requests and coordinate application flow.
-* **Business Logic Layer** – Repository ingestion, chat orchestration, and indexing services.
-* **AI Layer** – LangChain retrieval pipeline, prompt engineering, embeddings, and LLM interaction.
-* **Data Layer** – GitHub repositories, document loading, chunking, and FAISS vector storage.
-
-This layered architecture makes each component independent, easier to test, and simpler to extend without affecting the rest of the application.
-
-### Modular Architecture
-
-Instead of placing all logic inside a single file, the application is organized into dedicated modules for:
-
-* Repository ingestion
-* Document loading
-* Chunking
-* Vector database management
-* Retrieval pipeline
-* API communication
-* Session management
-* Frontend components
-
-This improves readability, maintainability, and future scalability while closely reflecting real-world software engineering practices.
-
-
-
-# 🧠 How CodeAtlas Works
-
-## Step 1 — Repository Ingestion
-
-The user provides a GitHub repository URL.
-
-Example:
+The user provides a public GitHub repository URL:
 
 ```text
 https://github.com/username/project
 ```
 
-The backend clones the repository locally.
+CodeAtlas validates the repository URL and clones the repository locally using **GitPython**.
 
----
+### Step 2 — Document Loading
 
-## Step 2 — Document Loading
+The repository is recursively scanned for supported source and documentation files, including Python, Java, C/C++, JavaScript, TypeScript, HTML, CSS, JSON, YAML, Markdown, and plain text files.
 
-The repository is scanned recursively.
+Excluded directories such as `.git`, `node_modules`, virtual environments, and generated build directories are skipped during indexing.
 
-Supported source files include:
+Each loaded file is converted into a document with metadata such as its source path and file type.
 
-* Python
-* Java
-* C/C++
-* JavaScript
-* TypeScript
-* HTML
-* CSS
-* JSON
-* YAML
-* Markdown
-* Text files
+### Step 3 — Text Chunking
 
-Each file becomes a LangChain Document with metadata such as its file path.
+Large files are divided into smaller chunks using LangChain's **Recursive Character Text Splitter**.
 
----
-
-## Step 3 — Text Chunking
-
-Large files are divided into smaller chunks using LangChain's Recursive Character Text Splitter.
-
-Chunking improves retrieval quality by allowing the system to retrieve only the relevant portions of the repository.
-
----
-
-## Step 4 — Embedding Generation
-
-Each chunk is converted into a dense vector representation using:
-
-```
-BAAI/bge-small-en-v1.5
+```text
+Chunk size: 1000
+Chunk overlap: 200
 ```
 
-Embeddings capture semantic meaning rather than exact keyword matches.
+Chunking allows the retrieval system to work with relevant portions of large files instead of retrieving entire files unnecessarily.
+
+### Step 4 — Embedding Generation
+
+Each chunk is converted into a vector representation using `BAAI/bge-small-en-v1.5` through **FastEmbed**, enabling semantic similarity search over repository content.
+
+### Step 5 — Vector Storage
+
+The generated embeddings are stored in a **FAISS vector database**, enabling efficient similarity search over indexed repository chunks.
+
+### Step 6 — Repository Intelligence
+
+In parallel with semantic indexing, CodeAtlas analyzes the repository structurally, extracting languages, files, functions, classes, imports, dependencies, entry points, and directory structure. The resulting repository profile is persisted for later use by the architecture, dependency, impact, and SRS modules.
+
+### Step 7 — Retrieval-Augmented Generation
+
+```text
+Question
+   ↓
+Similarity Retrieval
+   ↓
+Top Relevant Chunks
+   ↓
+Evidence Ranking
+   ↓
+Prompt Construction
+   ↓
+Groq LLM
+   ↓
+Answer + Sources + Evidence
+```
+
+The current retrieval layer ranks candidate chunks and returns the most relevant evidence to the chat service.
+
+### Step 8 — Evidence-Based SRS Reconstruction
+
+```text
+Capability Detection
+        ↓
+Requirement Builder
+        ↓
+Evidence Mapper
+        ↓
+SRS Sections
+        ↓
+SRS Formatter
+```
+
+Only capabilities and requirements supported by repository evidence are represented.
 
 ---
 
-## Step 5 — Vector Storage
+## ⚙️ Technology Stack
 
-All embeddings are stored inside a FAISS vector database.
-
-FAISS enables extremely fast similarity search over thousands of code chunks.
-
----
-
-## Step 6 — Retrieval-Augmented Generation (RAG)
-
-When a user asks a question:
-
-1. The question is embedded.
-2. FAISS retrieves the most relevant code chunks.
-3. Retrieved context is injected into the prompt.
-4. Groq's Llama 3.3 generates the final answer.
-
-This significantly reduces hallucinations by grounding responses in the repository.
+| Category              | Technology                           |
+| ---------------------- | ------------------------------------ |
+| Programming Language   | Python 3.11                          |
+| Frontend                | Streamlit                            |
+| Backend                 | FastAPI                              |
+| LLM                     | Groq — `openai/gpt-oss-120b`         |
+| Framework                | LangChain                            |
+| Embeddings              | FastEmbed — `BAAI/bge-small-en-v1.5` |
+| Vector Database         | FAISS                                |
+| Repository Cloning      | GitPython                            |
+| Repository Analysis     | Python AST + static analysis         |
+| Data Validation         | Pydantic                             |
+| API Communication       | REST / HTTP                          |
 
 ---
 
-# 📂 Project Structure
+## 📂 Project Structure
 
 ```text
 CodeAtlas/
-
+│
 ├── backend/
 │   ├── api/
+│   │   ├── routes.py
+│   │   └── schemas.py
+│   │
 │   ├── loaders/
+│   │   ├── github_loader.py
+│   │   └── document_loader.py
+│   │
 │   ├── services/
+│   │   ├── chunking_service.py
+│   │   ├── embedding_service.py
+│   │   ├── vectorstore_service.py
+│   │   ├── github_service.py
+│   │   ├── chat_service.py
+│   │   └── retrieval_service.py
+│   │
+│   ├── repository_intelligence/
+│   │   ├── analysis_store.py
+│   │   ├── code_structure_analyzer.py
+│   │   ├── dependency_analyzer.py
+│   │   ├── impact_analyzer.py
+│   │   ├── language_detector.py
+│   │   ├── repository_analyzer.py
+│   │   └── srs/
+│   │       ├── capability_detector.py
+│   │       ├── requirement_builder.py
+│   │       ├── evidence_mapper.py
+│   │       ├── srs_generator.py
+│   │       ├── srs_sections.py
+│   │       └── srs_formatter.py
+│   │
 │   ├── config.py
 │   └── main.py
 │
 ├── frontend/
 │   ├── components/
-│   ├── styles/
-│   ├── assets/
-│   ├── session_state.py
+│   │   ├── repository_card.py
+│   │   ├── stats_dashboard.py
+│   │   ├── repository_intelligence.py
+│   │   ├── architecture_view.py
+│   │   ├── srs_generator.py
+│   │   └── chat_interface.py
+│   │
 │   ├── api_client.py
+│   ├── config.py
+│   ├── session_state.py
 │   └── app.py
 │
 ├── data/
 │   ├── repos/
-│   └── vectorstore/
+│   ├── vectorstore/
+│   └── repository_analysis/
 │
 ├── requirements.txt
 ├── README.md
@@ -329,124 +394,244 @@ CodeAtlas/
 
 ---
 
-# ▶️ Installation
+## 🏛️ Software Engineering Principles
 
-Clone the repository.
+### Separation of Concerns
+
+CodeAtlas separates responsibilities across independent layers:
+
+- **Frontend Layer** — Streamlit interface and user interactions
+- **API Layer** — FastAPI endpoints and request/response handling
+- **Service Layer** — ingestion, indexing, retrieval, and chat orchestration
+- **Repository Intelligence Layer** — static repository analysis and dependency reasoning
+- **SRS Layer** — capability detection, requirement construction, evidence mapping, and formatting
+- **Data Layer** — repositories, analysis artifacts, and FAISS vector stores
+
+This structure keeps individual responsibilities isolated and makes the application easier to maintain and extend.
+
+### Modular Architecture
+
+The application is divided into focused modules for GitHub repository cloning, document loading, text chunking, embedding generation, vector storage, retrieval, chat orchestration, repository analysis, dependency analysis, change-impact analysis, SRS generation, frontend components, API communication, and session management.
+
+This avoids placing the complete application inside a single file and supports independent modification of major components.
+
+---
+
+## 🔍 Explainable RAG
+
+A major part of CodeAtlas is making retrieval visible to the user.
+
+For every question, the system exposes:
+
+```text
+Retrieved Source
+      ↓
+Rank
+      ↓
+Relevance Score
+      ↓
+Evidence Preview
+```
+
+
+The retrieved evidence is then supplied to the conversational generation layer, allowing users to inspect the repository sources contributing to an answer.
+
+---
+
+## 📄 Evidence Traceability
+
+The SRS module connects reconstructed requirements to implementation evidence.
+
+Example:
+
+```text
+REQ-ML-001
+    │
+    ├── Capability: Machine Learning
+    ├── Evidence: ai_models/train_model.py
+    ├── Evidence: dashboard/arrival_prediction_model.py
+    └── Implementation Unit: predict_arrival_next_hour
+```
+
+This creates a direct relationship between:
+
+```text
+Requirement
+    ↓
+Capability
+    ↓
+Repository Evidence
+    ↓
+Implementation
+```
+
+---
+
+## 🚀 Installation
+
+### 1. Clone the repository
 
 ```bash
 git clone <repository-url>
 cd CodeAtlas
 ```
 
-Create a virtual environment.
+### 2. Create a virtual environment
 
 ```bash
 python -m venv venv
 ```
 
-Activate it.
-
-Windows
+**Windows**
 
 ```bash
 venv\Scripts\activate
 ```
 
-Linux/macOS
+**Linux/macOS**
 
 ```bash
 source venv/bin/activate
 ```
 
-Install dependencies.
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Create a `.env` file.
+### 4. Configure environment variables
+
+Create a local `.env` file:
 
 ```env
 GROQ_API_KEY=YOUR_GROQ_API_KEY
 ```
 
+> ⚠️ Never commit `.env` or API keys to GitHub.
+
 ---
 
-# ▶️ Running the Application
+## ▶️ Running the Application
 
-Start the FastAPI backend.
+### Start the FastAPI backend
 
 ```bash
-uvicorn backend.main:app --reload
+python -m uvicorn backend.main:app --reload --port 8000
 ```
 
-Open another terminal and start the frontend.
+The backend will be available at:
+
+```text
+http://localhost:8000
+```
+
+FastAPI documentation:
+
+```text
+http://localhost:8000/docs
+```
+
+### Start the Streamlit frontend
+
+Open another terminal:
 
 ```bash
-streamlit run frontend/app.py
+python -m streamlit run frontend/app.py
+```
+
+The frontend will normally be available at:
+
+```text
+http://localhost:8501
 ```
 
 ---
 
-# 💬 Example Questions
 
-* What is this repository about?
-* Explain the project architecture.
-* Which technologies are used?
-* What does the README contain?
-* Which files define the UI?
-* Explain the CSS structure.
-* Where is authentication implemented?
-* How is routing handled?
-* Describe the project folder structure.
-* Summarize this repository for a beginner.
 
----
+## 🎯 What CodeAtlas Provides
 
-# 🎯 Key Learning Outcomes
+```text
+              CODEATLAS
+                  │
+      ┌───────────┼───────────┐
+      │           │           │
+      ▼           ▼           ▼
+ Repository   Repository   Repository
+ Intelligence  Analysis     Chat
+      │           │           │
+      │           ├── Dependency Graph
+      │           ├── Impact Analysis
+      │           └── Architecture
+      │
+      ├── Languages
+      ├── Files
+      ├── Functions
+      ├── Classes
+      └── Entry Points
+                  │
+                  ▼
+          Evidence-Based SRS
+                  │
+                  ▼
+          Requirement Traceability
+```
 
-This project demonstrates practical understanding of:
-
-* Retrieval-Augmented Generation (RAG)
-* Semantic Search
-* Vector Databases
-* Prompt Engineering
-* LangChain Pipelines
-* FastAPI Development
-* Streamlit UI Development
-* REST API Integration
-* Repository Parsing
-* Software Architecture
-* Modular Backend Design
-
----
-
-# 🔮 Future Improvements
-
-* Multi-repository support
-* Persistent conversation memory
-* GitHub Issues integration
-* Branch selection
-* Commit history analysis
-* Pull Request summarization
-* Function-level code explanations
-* Line-number citations
-* Docker support
-* Cloud deployment
-* Authentication
-* Repository caching
-* Support for private repositories using GitHub tokens
+CodeAtlas combines **repository structure analysis, semantic retrieval, conversational interaction, dependency reasoning, change analysis, and evidence-based documentation** in a single application.
 
 ---
 
-# 👨‍💻 Author
+## 🎓 Key Learning Outcomes
+
+This project demonstrates practical implementation of:
+
+- Retrieval-Augmented Generation
+- Semantic Search
+- Vector Databases
+- Embeddings
+- LLM Integration
+- Prompt Engineering
+- Static Code Analysis
+- Python AST Parsing
+- Dependency Analysis
+- Change Impact Analysis
+- Evidence Traceability
+- Software Requirements Reconstruction
+- FastAPI Development
+- Streamlit Development
+- REST API Integration
+- Modular Software Architecture
+- Separation of Concerns
+
+---
+
+## 🔮 Future Improvements
+
+- Multi-repository support
+- Repository caching
+- GitHub Issues integration
+- Pull Request analysis
+- Commit history analysis
+- Branch selection
+- Function-level explanations
+- Line-level citations
+- Private repository support
+- Authentication
+- Docker support
+- Persistent conversation memory
+- Advanced cross-file and cross-language analysis
+
+---
+
+## 👨‍💻 Author
 
 **Hareesha Nellakara**
 
-Developed as an end-to-end AI application to explore modern Retrieval-Augmented Generation (RAG), software architecture, and developer productivity tools.
+Developed as an end-to-end AI application exploring repository intelligence, Retrieval-Augmented Generation, software architecture, static code analysis, and explainable AI-assisted development tools.
 
 ---
 
-# 📄 License
+## 📄 License
 
-This project is intended for educational and portfolio purposes.
+This project is intended for **educational and portfolio purposes**.
