@@ -32,12 +32,13 @@ The system combines **static repository analysis** with **LLM-powered conversati
 
 ---
 
- ## 🎥 Demo
+
+
+## 🎥 Demo
 
 A complete walkthrough of CodeAtlas covering repository ingestion, repository intelligence, dependency analysis, change-impact analysis, explainable RAG, and evidence-based SRS generation.
 
-
-![](https://github.com/user-attachments/assets/c8dbd78c-2e9c-43c0-8236-fd66eadda242)
+https://github.com/user-attachments/assets/c8dbd78c-2e9c-43c0-8236-fd66eadda242
 
 
 
